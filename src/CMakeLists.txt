@@ -1,5 +1,7 @@
 add_executable(
     hello-triangle Application.cpp
+    Triangle.h
+    Triangle.cpp
     
     # Core
     Core/Utils.h
