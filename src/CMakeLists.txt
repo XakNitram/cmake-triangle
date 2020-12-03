@@ -11,6 +11,8 @@ add_executable(
     Renderer/GLDebug.h
     Renderer/GLDebug.cpp
     Renderer/Buffer.h
+    Renderer/VertexArray.h
+    Renderer/VertexArray.cpp
     Renderer/Shader.h
     Renderer/Shader.cpp
 )

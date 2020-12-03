@@ -2,47 +2,15 @@
 #include "Core/Utils.h"
 #include "Core/Simulation.h"
 #include "Renderer/GLDebug.h"
-#include "Renderer/Buffer.h"
 #include "Renderer/Shader.h"
+#include "Renderer/Buffer.h"
+#include "Renderer/VertexArray.h"
 
 using namespace lwvl;
 
 
 // Left-most-point-defined iscoceles triangle.
 class Triangle {
-    class VertexArray {
-        unsigned int attributes = 0;
-    public:
-        unsigned int id;
-
-        VertexArray() {
-            glGenVertexArrays(1, &id);
-        }
-
-        ~VertexArray() {
-            glDeleteVertexArrays(1, &id);
-        }
-
-        void bind() {
-            glBindVertexArray(id);
-        }
-
-        static void clear() {
-            glBindVertexArray(0);
-        }
-
-        void attribute(uint8_t dimensions, GLenum type, int64_t stride, int64_t offset) {
-            glEnableVertexAttribArray(attributes);
-            glVertexAttribPointer(attributes, dimensions, type, GL_FALSE, stride, reinterpret_cast<void*>(offset));
-            attributes++;
-        }
-
-        void drawArrays(GLenum mode, int count) {
-            glDrawArrays(mode, 0, count);
-        }
-    };
-
-    ShaderProgram m_program;
     VertexArray m_array;
     ArrayBuffer m_model;
 
@@ -53,8 +21,6 @@ class Triangle {
             x + width,       y,          0.0f, 1.0f, 0.0f,
             x + (width / 2), y + height, 0.0f, 0.0f, 1.0f
         };
-
-        m_program.link(readFile("Shaders/triangle.vert"), readFile("Shaders/triangle.frag"));
 
         m_array.bind();
         m_model.usage(Usage::Static);
@@ -69,11 +35,9 @@ class Triangle {
     }
 
     void draw() {
-        m_program.bind();
         m_array.bind();
         m_array.drawArrays(GL_TRIANGLES, 3);
         m_array.clear();
-        m_program.clear();
     }
 };
 
@@ -94,15 +58,20 @@ class HelloTriangle : public Simulation {
     }
 
     debug::GLEventListener listener = debug::GLEventListener(this, gl_callback);
+    ShaderProgram m_program;
     Triangle triangle;
 
     public:
     HelloTriangle(unsigned int width, unsigned int height, GLFWmonitor* monitor = nullptr): 
-        Simulation(width, height, "HelloTriangle", monitor), triangle(-0.5f, -0.5f, 1.0f, 1.0f)
-    {}
+        Simulation(width, height, "HelloTriangle", monitor), 
+        triangle(-0.5f, -0.5f, 1.0f, 1.0f)
+    {
+        m_program.link(readFile("Shaders/triangle.vert"), readFile("Shaders/triangle.frag"));
+    }
 
     void draw() final {
         glClear(GL_COLOR_BUFFER_BIT);
+        m_program.bind();
         triangle.draw();
     }
 };
