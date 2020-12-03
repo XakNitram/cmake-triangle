@@ -1,0 +1,6 @@
+[submodule "vendor/GLFW"]
+	path = vendor/GLFW
+	url = https://github.com/glfw/glfw
+[submodule "vendor/Glad"]
+	path = vendor/Glad
+	url = https://github.com/XakNitram/Glad
