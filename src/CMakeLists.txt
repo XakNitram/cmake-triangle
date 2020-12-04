@@ -23,6 +23,10 @@ target_link_libraries(hello-triangle PRIVATE glad)
 target_link_libraries(hello-triangle PRIVATE glfw)
 target_precompile_headers(hello-triangle PRIVATE pch.h pch.cpp)
 
+# if(MSVC)
+#     set_target_properties(hello-triangle PROPERTIES WIN32_EXECUTABLE TRUE)
+# endif()
+
 add_custom_command(
     TARGET hello-triangle POST_BUILD 
     COMMAND ${CMAKE_COMMAND} -E copy_directory 
