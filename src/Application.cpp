@@ -27,7 +27,7 @@ class HelloTriangle : public Simulation {
     }
 
     debug::GLEventListener listener = debug::GLEventListener(this, gl_callback);
-    ShaderProgram m_program;
+    ShaderProgram program;
     Triangle triangle;
 
 public:
@@ -35,12 +35,13 @@ public:
         Simulation(width, height, "HelloTriangle", monitor), 
         triangle(-0.5f, -0.5f, 1.0f, 1.0f)
     {
-        m_program.link(readFile("Shaders/triangle.vert"), readFile("Shaders/triangle.frag"));
+        program.link(readFile("Shaders/triangle.vert"), readFile("Shaders/triangle.frag"));
+        swapInterval(1);
     }
 
     void draw() final {
         glClear(GL_COLOR_BUFFER_BIT);
-        m_program.bind();
+        program.bind();
         triangle.draw();
     }
 };
